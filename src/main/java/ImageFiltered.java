@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -13,6 +8,7 @@ import java.util.ArrayList;
  */
 
 /**
+ * arp, tcp, socket, puerto, protocolo de aplicacion
  * Kernel examples
  *
  * Vertical edge:
@@ -45,18 +41,27 @@ import java.util.ArrayList;
 public class ImageFiltered extends BufferedImage{
     private int height;
     private int width;
-    ArrayList<ArrayList<Integer>> pixels;
-    private int[][] kernel = { {1, 0, -1},
-            {1, 0, -1},
-            {1, 0, -1}};
+    private ArrayList<ArrayList<Integer>> convolutionSparks = new ArrayList<ArrayList<Integer>>();;
+    ArrayList<ArrayList<Integer>> pixels = new ArrayList<ArrayList<Integer>>();
+    private int[][] kernel = { {0, 0, 0},
+                            {-1, 2, -1},
+                            {0, 0, 0}};
 
     private int totalKernel = 0;
 
-    ImageFiltered(int height, int width, int imageType, ArrayList<ArrayList<Integer>> pixels) {
-        super(width, height, imageType);
-        this.height = height;
-        this.width = width;
-        this.pixels = pixels;
+    ImageFiltered(BufferedImage image) {
+        super(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        this.width = image.getWidth();
+        this.height = image.getHeight();
+        for (int i = 0; i < image.getWidth(); i++) {
+            ArrayList<Integer> list = new ArrayList<Integer>();
+            for (int j = 0; j < image.getHeight(); j++) {
+                int clr = image.getRGB(i, j);
+                list.add(clr);
+            }
+            this.pixels.add(list);
+
+        }
         for (int i = 0; i < kernel.length; i++) {
             for (int j = 0; j < kernel[0].length; j++) {
                 totalKernel += kernel[i][j];
@@ -74,6 +79,11 @@ public class ImageFiltered extends BufferedImage{
                 int [] pintar = calculatedPixel(i, j);
                 Color rgb = new Color (pintar[0], pintar[1], pintar[2]);
                 this.setRGB(i, j, rgb.getRGB());
+                if ((pintar[0] + pintar[1] + pintar[2]) > 570){
+                    ArrayList<Integer> position = new ArrayList<Integer>();
+                    position.add(i, j);
+                    convolutionSparks.add(position);
+                }
             }
         }
     }
@@ -101,6 +111,7 @@ public class ImageFiltered extends BufferedImage{
                 totalGreen += kernelsPixels[k][l][1] * kernel[k][l];
                 totalBlue += kernelsPixels[k][l][2] * kernel[k][l];
             }
+
         }
 
         totalRed = totalRed / totalKernel;
@@ -135,5 +146,9 @@ public class ImageFiltered extends BufferedImage{
         int green = color >> 8 & 0xFF;
         int blue = color & 0xFF;
         return new int[]{red, green, blue};
+    }
+
+    public ArrayList<ArrayList<Integer>> getconvolutionSparks() {
+        return convolutionSparks;
     }
 }

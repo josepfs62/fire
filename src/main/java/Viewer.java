@@ -4,10 +4,6 @@ import java.awt.image.BufferedImage;
 
 import static java.lang.Thread.sleep;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 /**
  *
  * @author Josep Fayos
@@ -18,16 +14,8 @@ public class Viewer extends Canvas implements Runnable {
     private Flame flame;
     private BufferedImage image;
 
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    public void setImage(BufferedImage image) {
-        this.image = image;
-    }
-
     private Boolean active = true;
-    
+
     public Viewer(Flame flame) {
         super();
         this.flame = flame;
@@ -35,16 +23,8 @@ public class Viewer extends Canvas implements Runnable {
         view.start();
     }
 
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-    
     public void paint() {
-        Image image = flame;
+        Image imageFlame = flame;
         BufferStrategy bs = this.getBufferStrategy();
         Graphics g = bs.getDrawGraphics();
 
@@ -52,23 +32,52 @@ public class Viewer extends Canvas implements Runnable {
             return;
         }
 
-        g.drawImage(getImage(), 249, 0, this);
-        g.drawImage(image, 249, 0, this);
-        //g.drawImage(flame, 0, 0, this);
+        g.drawImage(getImage(), 375, 0, this);
+        g.drawImage(imageFlame, 375, 0, this);
+        g.drawImage(flame, 375, 0, this);
 
         bs.show();
         g.dispose();
     }
 
+    public BufferedImage getImage() {
+        return image;
+    }
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+    public Boolean getActive() {
+        return active;
+    }
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+
+    //public void
+//    if((pintar[0] + pintar[1] + pintar[2]) > 450){
+//        ArrayList<Integer> list = new ArrayList<Integer>();
+//        this.convolutionSparks.add(list);
+//        list.add(i);
+//        list.add(j);
+//    }
+
+//
     @Override
     public void run() {
+        boolean createBufferedStrat = false;
+
         while (true){
             while (active) {
-                try {
-                    sleep(200);
-                    createBufferStrategy(2);
-                } catch
-                    (InterruptedException ex) {
+
+                while (!createBufferedStrat) {
+                    try {
+                        sleep(3000);
+                        createBufferStrategy(2);
+                        createBufferedStrat = true;
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
 
                 while (true) {
@@ -79,7 +88,6 @@ public class Viewer extends Canvas implements Runnable {
                         sleep(33);
                     } catch (Exception e) {
                     }
-
                 }
 //                if (this.getGraphics() != null) {
 //                    paint(this.getGraphics());
